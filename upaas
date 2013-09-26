@@ -15,7 +15,7 @@ case "$1" in
     echo "-----> Cleaning up ..."
     upaas cleanup
     echo "-----> Cleanup complete!"
-    echo "=====> Application deployed"
+    echo "=====> Application deployed:" `cat $HOME/$APP/ADDRESS`
     ;;
 
   build)
