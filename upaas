@@ -20,13 +20,18 @@ case "$1" in
 
   build)
     IMAGE="$2"
-    id=$(cat | docker run -i -a stdin upaas/stack/node /bin/bash -c "mkdir -p /app && tar -xC /app")
+    tmpdir=$(mktemp -d)
+    $(cat > $tmpdir/app.tar)
+    (cd $tmpdir; tar xf app.tar)
+    stack=$(cat $tmpdir/.stack)
+    id=$(cat $tmpdir/app.tar | docker run -i -a stdin upaas/stack/$stack /bin/bash -c "mkdir -p /app && tar -xC /app")
     test $(docker wait $id) -eq 0
     docker commit $id $IMAGE > /dev/null
     id=$(docker run -d $IMAGE /bin/bash -c "cd /app && make build")
     docker attach $id
     test $(docker wait $id) -eq 0
     docker commit $id $IMAGE > /dev/null
+    rm -rf $tmpdir
     ;;
 
   release)
