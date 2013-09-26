@@ -12,10 +12,10 @@ install: /usr/bin/docker /home/git/receiver /usr/local/bin/upaas stacks
 	lsmod | grep aufs || modprobe aufs || apt-get install -y linux-image-extra-`uname -r`
 	apt-get install -y lxc-docker
 
-/usr/local/bin/upaas:
+/usr/local/bin/upaas: ./upaas
 	cp ./upaas $(@D)
 
-/usr/local/bin/gitreceive:
+/usr/local/bin/gitreceive: ./gitreceive
 	cp ./gitreceive $(@D)
 
 /home/git/receiver: /usr/local/bin/gitreceive
