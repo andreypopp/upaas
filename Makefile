@@ -5,6 +5,9 @@ all:
 install: /usr/bin/docker /home/git/receiver /usr/local/bin/upaas stacks
 	usermod -aG docker git
 
+update:
+	$(MAKE) -B /home/git/receiver /usr/local/bin/upaas stacks
+
 /usr/bin/docker:
 	curl http://get.docker.io/gpg | apt-key add -
 	echo deb http://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list
