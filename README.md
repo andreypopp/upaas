@@ -18,3 +18,6 @@ Currently an application must have the following files in the repository root:
     (install runtime dependencies and so on)
   * **.stack** which contains a single line with a name of the stack to use for
     running the app
+
+In the future **Makefile** will be provided by stack you will not have to write
+it unless you need to customize build process.
