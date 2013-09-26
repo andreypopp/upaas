@@ -1,0 +1,2 @@
+#!/bin/bash
+set -e; cat | upaas receive $1 | sed -u "s/^/"$'\e[1G'"/"
