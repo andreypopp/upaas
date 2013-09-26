@@ -36,10 +36,11 @@ Done!
 Currently an application must have the following files in the repository root:
 
   * **Procfile** which defines how to run the app
-  * **Makefile** with **build** target which describes how to build an app
-    (install runtime dependencies and so on)
   * **.stack** which contains a single line with a name of the stack to use for
     running the app
 
-In the future **Makefile** will be provided by stack you will not have to write
-it unless you need to customize build process.
+Optionally the following files can be also provided:
+
+  * **Makefile.upaas** which specify **build** target with instructions on how
+    to build the app. If no such files is provided stack's build instuctions
+    will be used instead
