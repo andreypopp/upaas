@@ -7,6 +7,7 @@ RUN apt-get -f install -y git wget curl make build-essential python-software-pro
 RUN add-apt-repository ppa:chris-lea/node.js
 RUN apt-get update
 RUN apt-get install -y nodejs
+
 RUN curl https://github.com/hecticjeff/shoreman/raw/master/shoreman.sh -sLo /usr/local/bin/shoreman
 RUN chmod +x /usr/local/bin/shoreman
 ADD build.mk /
