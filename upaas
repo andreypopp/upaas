@@ -27,7 +27,8 @@ case "$1" in
     id=$(cat $tmpdir/app.tar | docker run -i -a stdin upaas/stack/$stack /bin/bash -c "mkdir -p /app && tar -xC /app")
     test $(docker wait $id) -eq 0
     docker commit $id $IMAGE > /dev/null
-    id=$(docker run -d $IMAGE /bin/bash -c "cd /app && make build")
+    id=$(docker run -d $IMAGE /bin/bash -c \
+      "cd /app && if [[ -f "Makefile.upaas" ]]; then make -f Makefile.upaas build; else make -f /build.mk build; fi")
     docker attach $id
     test $(docker wait $id) -eq 0
     docker commit $id $IMAGE > /dev/null

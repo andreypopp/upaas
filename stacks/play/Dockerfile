@@ -13,3 +13,4 @@ RUN wget http://downloads.typesafe.com/play/2.2.0/play-2.2.0.zip
 RUN unzip play-2.2.0.zip
 RUN rm play-2.2.0.zip
 RUN mv play-2.2.0 /opt/play
+ADD build.mk /

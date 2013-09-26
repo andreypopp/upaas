@@ -9,3 +9,4 @@ RUN apt-get update
 RUN apt-get install -y nodejs
 RUN curl https://github.com/hecticjeff/shoreman/raw/master/shoreman.sh -sLo /usr/local/bin/shoreman
 RUN chmod +x /usr/local/bin/shoreman
+ADD build.mk /
