@@ -78,13 +78,6 @@ pre-start script
   fi
 end script
 
-post-stop script
-  while true; do
-    ID=\$(docker ps | grep upaas/$APP | awk '{ print \$1 }')
-    if [ ! -z "\$ID" ]; then sleep 1; else break; fi
-  done
-end script
-
 script
   sleep 3
   IMAGE=\$(docker images upaas/$APP | tail -n1 | awk '{ print \$3 }')
