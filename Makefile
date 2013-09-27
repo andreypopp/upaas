@@ -25,10 +25,10 @@ update:
 	cp ./gitreceive $(@D)
 
 /etc/init/git-init-session-setup.conf: ./git-init-session-setup.conf
-	cp ./gitreceive $(@D)
+	cp ./git-init-session-setup.conf $(@D)
 
 /etc/init/git-init-session.conf: ./git-init-session.conf
-	cp ./gitreceive $(@D)
+	cp ./git-init-session.conf $(@D)
 
 /home/git/receiver: /usr/local/bin/gitreceive
 	gitreceive init
