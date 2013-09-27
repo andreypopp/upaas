@@ -91,7 +91,7 @@ script
   echo \$ID > $HOME/$APP/CONTAINER
   echo \$PORT > $HOME/$APP/PORT
   echo "\$(cat $HOME/HOSTNAME):\$PORT" > $HOME/$APP/ADDRESS
-  docker wait \$ID
+  exec docker wait \$ID
 end script
 EOF
   ;;
