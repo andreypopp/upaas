@@ -1,6 +1,6 @@
 #!/bin/bash
-if [ -f "/run/git/$(id -u)/upstart/sessions/*.session" ]; then
-  export `cat /run/git/$(id -u)/upstart/sessions/*.session`
+if [ "$(ls -A /run/git/$(id -u git)/upstart/sessions)" ]; then
+  export `cat /run/git/$(id -u git)/upstart/sessions/*.session`
 fi
 set -e
 case "$1" in
@@ -52,6 +52,7 @@ case "$1" in
     if [[ ! -f "$HOME/$APP/PORT" ]]; then
       upaas install-upstart-script $APP
       /sbin/initctl --user reload-configuration > /dev/null
+      sleep 1
       /sbin/initctl --user start $APP > /dev/null
     else
       /sbin/initctl --user stop $APP > /dev/null
