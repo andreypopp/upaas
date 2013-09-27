@@ -41,7 +41,7 @@ case "$1" in
   release)
     APP="$2"; IMAGE="$3"
     if [[ -f "$HOME/$APP/ENV" ]]; then
-      id=$(cat "$HOME/$APP/ENV" | docker run -i -a stdin $IMAGE /bin/bash -c "mkdir -p /app/.profile.d && cat > /app/.profile.d/app-env.sh")
+      id=$(cat "$HOME/$APP/ENV" | docker run -i -a stdin $IMAGE /bin/bash -c "mkdir -p /app && cat >> /app/.env")
       test $(docker wait $id) -eq 0
       docker commit $id $IMAGE > /dev/null
     fi
@@ -78,37 +78,27 @@ pre-start script
   fi
 end script
 
-post-start script
-  while true; do
-    ID=\`docker ps | grep upaas/$APP | awk '{ print \$1 }'\`
-    if [ -z "\$ID" ]; then sleep 1; else break; fi
-  done
-  if [ -f "$HOME/$APP/PORT" ]; then
-    PORT=\`cat $HOME/$APP/PORT\`
-  else
-    PORT=\`docker port \$ID 5000\`
-  fi
-  echo \$ID > $HOME/$APP/CONTAINER
-  echo \$PORT > $HOME/$APP/PORT
-  echo "\`cat $HOME/HOSTNAME\`:\$PORT" > $HOME/$APP/ADDRESS
-end script
-
 post-stop script
   while true; do
-    ID=\`docker ps | grep upaas/$APP | awk '{ print \$1 }'\`
+    ID=\$(docker ps | grep upaas/$APP | awk '{ print \$1 }')
     if [ ! -z "\$ID" ]; then sleep 1; else break; fi
   done
 end script
 
 script
   sleep 3
-  IMAGE=\`docker images upaas/$APP | tail -n1 | awk '{ print \$3 }'\`
+  IMAGE=\$(docker images upaas/$APP | tail -n1 | awk '{ print \$3 }')
   if [ -f "$HOME/$APP/PORT" ]; then
-    PORT=\`cat $HOME/$APP/PORT\`
-    docker run -p ":\$PORT" -e "PORT=\$PORT" \$IMAGE /bin/bash -c "(cd /app && shoreman)"
+    PORT=\$(cat $HOME/$APP/PORT)
+    ID=\$(docker run -p ":\$PORT" -e "PORT=\$PORT" \$IMAGE /bin/bash -c "(cd /app && shoreman)")
   else
-    docker run -p 5000 -e PORT=5000 \$IMAGE /bin/bash -c "(cd /app && shoreman)"
+    ID=\$(docker run -p 5000 -e PORT=5000 \$IMAGE /bin/bash -c "(cd /app && shoreman)")
+    PORT=\$(docker port \$ID 5000)
   fi
+  echo \$ID > $HOME/$APP/CONTAINER
+  echo \$PORT > $HOME/$APP/PORT
+  echo "\$(cat $HOME/HOSTNAME):\$PORT" > $HOME/$APP/ADDRESS
+  docker wait \$ID
 end script
 EOF
   ;;
