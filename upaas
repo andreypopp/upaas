@@ -122,5 +122,5 @@ EOF
 
   service)
     shift;
-    exec sudo -i -u git initctl --user "$*"
+    exec sudo -i -u git initctl --user $*
 esac
