@@ -52,7 +52,9 @@ case "$1" in
       /sbin/initctl --user reload-configuration
       /sbin/initctl --user start $APP
     else
-      /sbin/initctl --user restart $APP
+      /sbin/initctl --user stop $APP
+      sleep 1
+      /sbin/initctl --user start $APP
     fi
     ;;
 
