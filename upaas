@@ -116,13 +116,4 @@ EOF
     # delete unused images
     docker images | grep '<none>' |  awk '{print $3}'  | xargs docker rmi &> /dev/null &
     ;;
-
-  # temporary hack for https://github.com/progrium/upaas/issues/82
-  deploy:all)
-    for app in $(ls -d $HOME/*/); do
-      APP=$(basename $app);
-      IMAGE="app/$APP"
-      upaas deploy $APP $IMAGE
-    done
-    ;;
 esac
