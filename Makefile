@@ -2,7 +2,9 @@ STACKS = $(shell ls -1 ./stacks/)
 
 all:
 
-install: /usr/bin/docker /home/git/receiver /usr/local/bin/upaas stacks
+install: /usr/bin/docker /home/git/receiver /usr/local/bin/upaas \
+		/etc/init/git-init-session-setup.conf /etc/init/git-init-session.conf \
+		stacks
 	usermod -aG docker git
 
 update:
@@ -19,6 +21,12 @@ update:
 	cp ./upaas $(@D)
 
 /usr/local/bin/gitreceive: ./gitreceive
+	cp ./gitreceive $(@D)
+
+/etc/init/git-init-session-setup.conf: ./git-init-session-setup.conf
+	cp ./gitreceive $(@D)
+
+/etc/init/git-init-session.conf: ./git-init-session.conf
 	cp ./gitreceive $(@D)
 
 /home/git/receiver: /usr/local/bin/gitreceive
