@@ -1,5 +1,7 @@
 #!/bin/bash
-export `cat /run/git/$(id -u)/upstart/sessions/*.session`
+if [ -f "/run/git/$(id -u)/upstart/sessions/*.session" ]; then
+  export `cat /run/git/$(id -u)/upstart/sessions/*.session`
+fi
 set -e
 case "$1" in
   receive)
@@ -102,9 +104,9 @@ script
   IMAGE=\`docker images upaas/$APP | tail -n1 | awk '{ print \$3 }'\`
   if [ -f "$HOME/$APP/PORT" ]; then
     PORT=\`cat $HOME/$APP/PORT\`
-    docker run -p ":\$PORT" -e "PORT=\$PORT" \$IMAGE /bin/bash -c "(cd /app && /usr/local/bin/shoreman)"
+    docker run -p ":\$PORT" -e "PORT=\$PORT" \$IMAGE /bin/bash -c "(cd /app && shoreman)"
   else
-    docker run -p 5000 -e PORT=5000 \$IMAGE /bin/bash -c "(cd /app && /usr/local/bin/shoreman)"
+    docker run -p 5000 -e PORT=5000 \$IMAGE /bin/bash -c "(cd /app && shoreman)"
   fi
 end script
 EOF
@@ -116,4 +118,8 @@ EOF
     # delete unused images
     docker images | grep '<none>' |  awk '{print $3}'  | xargs docker rmi &> /dev/null &
     ;;
+
+  service)
+    shift;
+    exec sudo -i -u git initctl --user "$*"
 esac
