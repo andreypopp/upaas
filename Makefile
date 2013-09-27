@@ -6,6 +6,7 @@ install: /usr/bin/docker /home/git/receiver /usr/local/bin/upaas \
 		/etc/init/git-init-session-setup.conf /etc/init/git-init-session.conf \
 		stacks
 	usermod -aG docker git
+	start git-init-session-setup || exit 0
 
 update:
 	$(MAKE) -B /home/git/receiver /usr/local/bin/upaas stacks
