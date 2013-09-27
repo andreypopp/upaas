@@ -49,12 +49,12 @@ case "$1" in
     APP="$2"; IMAGE="$3"
     if [[ ! -f "$HOME/$APP/PORT" ]]; then
       upaas install-upstart-script $APP
-      /sbin/initctl --user reload-configuration
-      /sbin/initctl --user start $APP
+      /sbin/initctl --user reload-configuration > /dev/null
+      /sbin/initctl --user start $APP > /dev/null
     else
-      /sbin/initctl --user stop $APP
+      /sbin/initctl --user stop $APP > /dev/null
       sleep 1
-      /sbin/initctl --user start $APP
+      /sbin/initctl --user start $APP > /dev/null
     fi
     ;;
 
