@@ -1,2 +1,2 @@
 build:
-	/opt/play/play dist
+	/opt/play/play stage
