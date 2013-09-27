@@ -19,16 +19,16 @@ update:
 	apt-get install -y lxc-docker
 
 /usr/local/bin/upaas: ./upaas
-	cp ./upaas $(@D)
+	cp $< $(@D)
 
 /usr/local/bin/gitreceive: ./gitreceive
-	cp ./gitreceive $(@D)
+	cp $< $(@D)
 
 /etc/init/git-init-session-setup.conf: ./git-init-session-setup.conf
-	cp ./git-init-session-setup.conf $(@D)
+	cp $< $(@D)
 
 /etc/init/git-init-session.conf: ./git-init-session.conf
-	cp ./git-init-session.conf $(@D)
+	cp $< $(@D)
 
 /home/git/receiver: /usr/local/bin/gitreceive
 	gitreceive init
