@@ -1,4 +1,5 @@
 STACKS = $(shell ls -1 ./stacks/)
+APPS = $(shell ls -1 --ignore=HOSTNAME --ignore receiver  /home/git/)
 
 all:
 
@@ -9,7 +10,7 @@ install: /usr/bin/docker /home/git/receiver /usr/local/bin/upaas \
 	start git-init-session-setup || exit 0
 
 update:
-	$(MAKE) -B /home/git/receiver /usr/local/bin/upaas stacks
+	@$(MAKE) -B /home/git/receiver /usr/local/bin/upaas
 
 /usr/bin/docker:
 	curl http://get.docker.io/gpg | apt-key add -
@@ -38,3 +39,8 @@ stacks: $(STACKS:%=stack-%)
 
 stack-%: $(PWD)/stacks/%
 	docker build -t "upaas/stack/$(@:stack-%=%)" $<
+
+upstart: $(APPS:%=upstart-%)
+
+upstart-%:
+	sudo -i -u git upaas install-upstart-script $(@:upstart-%=%)
