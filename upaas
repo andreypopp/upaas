@@ -1,8 +1,9 @@
 #!/bin/bash
+set -e
+set -o pipefail
 if [ "$(ls -A /run/git/$(id -u git)/upstart/sessions)" ]; then
   export `cat /run/git/$(id -u git)/upstart/sessions/*.session`
 fi
-set -e
 case "$1" in
   receive)
     APP="$2"; IMAGE="upaas/$APP"
