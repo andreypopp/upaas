@@ -60,7 +60,6 @@ case "$1" in
       sleep 1
       /sbin/initctl --user start $APP > /dev/null
     fi
-    sleep 1
     ;;
 
   install-upstart-script)
@@ -70,6 +69,8 @@ case "$1" in
 description "Application $APP"
 
 start on startup
+
+console log
 
 respawn
 respawn limit 10 5
@@ -86,7 +87,6 @@ post-stop script
 end script
 
 script
-  sleep 3
   IMAGE=\$(docker images upaas/$APP | tail -n1 | awk '{ print \$3 }')
   if [ -f "$HOME/$APP/PORT" ]; then
     PORT=\$(cat $HOME/$APP/PORT)
@@ -98,7 +98,7 @@ script
   echo \$ID > $HOME/$APP/CONTAINER
   echo \$PORT > $HOME/$APP/PORT
   echo "\$(cat $HOME/HOSTNAME):\$PORT" > $HOME/$APP/ADDRESS
-  exec docker wait \$ID
+  exec docker attach \$ID
 end script
 EOF
   ;;
