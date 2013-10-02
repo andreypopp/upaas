@@ -60,6 +60,7 @@ case "$1" in
       sleep 1
       /sbin/initctl --user start $APP > /dev/null
     fi
+    sleep 1
     ;;
 
   install-upstart-script)
@@ -79,14 +80,19 @@ pre-start script
   fi
 end script
 
+post-stop script
+  ID=\$(cat $HOME/$APP/CONTAINER)
+  docker kill \$ID
+end script
+
 script
   sleep 3
   IMAGE=\$(docker images upaas/$APP | tail -n1 | awk '{ print \$3 }')
   if [ -f "$HOME/$APP/PORT" ]; then
     PORT=\$(cat $HOME/$APP/PORT)
-    ID=\$(docker run -p ":\$PORT" -e "PORT=\$PORT" \$IMAGE /bin/bash -c "(cd /app && shoreman)")
+    ID=\$(docker run -d -p ":\$PORT" -e "PORT=\$PORT" \$IMAGE /bin/bash -c "(cd /app && shoreman)")
   else
-    ID=\$(docker run -p 5000 -e PORT=5000 \$IMAGE /bin/bash -c "(cd /app && shoreman)")
+    ID=\$(docker run -d -p 5000 -e PORT=5000 \$IMAGE /bin/bash -c "(cd /app && shoreman)")
     PORT=\$(docker port \$ID 5000)
   fi
   echo \$ID > $HOME/$APP/CONTAINER
