@@ -56,7 +56,7 @@ case "$1" in
       sleep 1
       /sbin/initctl --user start $APP > /dev/null
     else
-      /sbin/initctl --user stop $APP > /dev/null
+      /sbin/initctl --user stop $APP || true > /dev/null
       sleep 1
       /sbin/initctl --user start $APP > /dev/null
     fi
